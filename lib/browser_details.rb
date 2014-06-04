@@ -95,7 +95,8 @@ class BrowserDetails
       end
     end
 
-    message.join(', ')
+    message="Browser Details: #{message.join(', ')}\n"
+    message+="Referer: #{request.referer}"
   end
 end
 
