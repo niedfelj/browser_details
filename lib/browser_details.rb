@@ -48,12 +48,13 @@ class BrowserDetails
   #
   def call(env)
     request = Rack::Request.new(env)
-    message = self.class.message(request)
+    browser_message = self.class.browser_message(request)
 
     # Log a message if any details were gathered.
-    unless message.empty?
-      log_message(env, message)
-    end
+    #unless message.empty?
+    log_message(env, browser_message)
+    log_message(env, "Referer: #{request.referer}")
+    #end
 
     # Delegate to the application we are wrapping.
     @app.call(env)
@@ -65,7 +66,7 @@ class BrowserDetails
   #
   # Returns a String of browser details for the request.
   #
-  def self.message(request)
+  def self.browser_message(request)
     message = []
 
     # Add the user agent details to the message if present.
@@ -95,8 +96,7 @@ class BrowserDetails
       end
     end
 
-    message="Browser Details: #{message.join(', ')}\n"
-    message+="Referer: #{request.referer}"
+    "Browser Details: #{message.join(', ')}"
   end
 end
 
